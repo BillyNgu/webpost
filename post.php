@@ -24,9 +24,12 @@ if (isset($_POST['post']) && !empty($_POST['title'])) {
             }
 
             // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
+            // Add a comment without images
 
+            if ($uploadOk == 0) {
+                addComment($title, $comment, $idUser);
+                header('location:login.php');
+//                echo "Sorry, your file was not uploaded.";
                 // if everything is ok, try to upload file
             } else {
                 addComment($title, $comment, $idUser);
@@ -42,10 +45,11 @@ if (isset($_POST['post']) && !empty($_POST['title'])) {
         }
 
         // Add a comment without images
-    } else {
-        addComment($title, $comment, $id);
-        header('location:login.php');
     }
+//    else {
+//        addComment($title, $comment, $id);
+//        header('location:login.php');
+//    }
 }
 ?>
 <!DOCTYPE html>

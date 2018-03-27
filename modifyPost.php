@@ -2,59 +2,19 @@
 require_once './dao/flashmessage.php';
 require_once './dao/dao.php';
 
-$id = filter_input(INPUT_GET, 'idComment', FILTER_VALIDATE_INT);
+$idComment = filter_input(INPUT_GET, 'idComment', FILTER_VALIDATE_INT);
 
-$post = getPost($id);
+$posts = getPost($idComment);
 
 // Check if image file is a actual image or fake image
 if (isset($_POST['modify']) && !empty($_POST['title'])) {
-    $uploadOk = 1;
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $nickname = $_SESSION['Nickname'];
     $idUser = getUserIdFromNickname($nickname);
 
-// Check if an image is ready to upload
-    if (!empty($_FILES['fileup'])) {
-        for ($index = 0; $index < count($_FILES['fileup']); $index++) {
-            $target_dir = "./uploaded_files/";
-            $target_file = $target_dir . basename($_FILES["fileup"]["name"][$index]);
-            $FileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-//            $check = getimagesize($_FILES["fileup"]["tmp_name"][$index]);
-            // Allow certain file formats
-            if ($FileType != "jpg" && $FileType != "png" && $FileType != "jpeg" && $FileType != "gif" &&
-                    $FileType != "mp3" && $FileType != "mp4" && $FileType != "avi") {
-                // echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                $uploadOk = 0;
-            }
-
-            // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
-
-                // if everything is ok, try to upload file
-            } else {
-                addComment($title, $comment, $idUser);
-
-                $fileType = $_FILES["fileup"]["type"][$index];
-                $fileName = $_FILES["fileup"]["name"][$index];
-                $tmpName = $_FILES["fileup"]["tmp_name"][$index];
-
-                addMedia($fileType, $fileName, $tmpName);
-                
-//                var_dump($tmpName);
-//                var_dump($fileName);
-//                var_dump($_FILES);
-                
-                header('location:login.php');
-            }
-        }
-
-        // Add a comment without images
-    } else {
-        addComment($title, $comment, $id);
-        header('location:login.php');
-    }
+    modifyComment($title, $comment, $idComment);
+    header('location:login.php');
 }
 ?>
 <!DOCTYPE html>
@@ -94,32 +54,26 @@ if (isset($_POST['modify']) && !empty($_POST['title'])) {
                 </div>
             </nav>
             <div class="col">
-                <form action="post.php" class="form center-block" method="post" enctype="multipart/form-data">
-                    <?php foreach ($post as $key => $value): ?>
-                    <div class="form-group">
-                        <h3><label for="post_title">Titre :</label></h3>
-                        <input id="post_title" autofocus="" class="form-control col-3" value="<?php
-                        if (!empty($post)) {
-                            echo $value['titleComment'];
-                        }
-                        ?>" type="text" name="title" placeholder="Entrez un titre">
-                    </div>
-                    <div class="form-group">
-                        <h3><label for="post_commentary">Commentaire :</label></h3>
-                        <textarea id="post_commentary" name="comment" class="form-control input-lg col-4" autofocus="" placeholder="Que voulez-vous partager ?"><?php if (!empty($post)) {
-                            echo $value['commentary'];
-                        } ?></textarea>
-                    </div>
-                    <ul class="pull-left list-inline">
-                        <li>
-                            <div class="custom-file col-5">
-                                <input name="fileup[]" type="file" id="customFile" multiple accept="image/*,audio/*,video/*">
-                                <label for="customFile">Choisissez un fichier</label>
-                            </div>
-                        </li>
-                    </ul>
-                    <input class="btn btn-primary" type="submit" value="Modifier" name="modify">
-                    <a class="btn btn-primary" href="login.php">Annuler</a>
+                <form action="modifyPost.php" class="form center-block" method="post" enctype="multipart/form-data">
+                    <?php foreach ($posts as $key => $value): ?>
+                        <div class="form-group">
+                            <h3><label for="post_title">Titre :</label></h3>
+                            <input id="post_title" autofocus="" class="form-control col-3" value="<?php
+                            if (!empty($posts)) {
+                                echo $value['titleComment'];
+                            }
+                            ?>" type="text" name="title" placeholder="Entrez un titre">
+                        </div>
+                        <div class="form-group">
+                            <h3><label for="post_commentary">Commentaire :</label></h3>
+                            <textarea id="post_commentary" name="comment" class="form-control input-lg col-4" autofocus="" placeholder="Que voulez-vous partager ?"><?php
+                                if (!empty($posts)) {
+                                    echo $value['commentary'];
+                                }
+                                ?></textarea>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Modifier" name="modify">
+                        <a class="btn btn-primary" href="login.php">Annuler</a>
                     <?php endforeach; ?>
                 </form>
             </div>
