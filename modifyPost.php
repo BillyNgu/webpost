@@ -5,8 +5,6 @@ require_once './dao/dao.php';
 $idComment = filter_input(INPUT_GET, 'idComment', FILTER_VALIDATE_INT);
 $posts = getPost($idComment);
 
-var_dump($idComment);
-
 if (isset($_POST['modify']) && !empty($_POST['title'])) {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
@@ -52,7 +50,7 @@ if (isset($_POST['modify']) && !empty($_POST['title'])) {
                 </div>
             </nav>
             <div class="col">
-                <form action="modifyPost.php" class="form center-block" method="post" enctype="multipart/form-data">
+                <form action="modifyPost.php?idComment=<?= $idComment?>" class="form center-block" method="post" enctype="multipart/form-data">
                     <?php foreach ($posts as $key => $value): ?>
                         <div class="form-group">
                             <h3><label for="post_title">Titre :</label></h3>

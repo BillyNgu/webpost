@@ -49,6 +49,8 @@ $postsPerID = getAllPostsByIDUser($id);
                     foreach ($postsPerID as $key => $value):
                         $hours = date('H:i', strtotime($value['datePost']));
                         $date = date('d-m-Y', strtotime($value['datePost']));
+                        $modifDate = date('d-m-Y', strtotime($value['modifyDate']));
+                        $modifHours = date('H:i', strtotime($value['modifyDate']));
                         $file = getNameMediaInPostByIdPost($value['idComment']);
                         ?>
                         <article>
@@ -99,7 +101,7 @@ $postsPerID = getAllPostsByIDUser($id);
                                         <p><?= $value['commentary']; ?></p>
                                         <p class="card-subtitle">
                                             <small class="text-muted">
-                                                Posté le <?= $date; ?> à <?= $hours; ?>
+                                                Posté le <?= $date; ?> à <?= $hours; ?>. Modifié le <?= $modifDate; ?> à <?= $modifHours; ?>
                                             </small>
                                         </p>
                                         <a href="modifyPost.php?idComment=<?= $value['idComment']; ?>">Modifier</a> | <a href="deletePost.php?idComment=<?= $value['idComment'] ?>">Supprimer</a>
