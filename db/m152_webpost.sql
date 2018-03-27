@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le :  jeu. 08 mars 2018 à 07:42
--- Version du serveur :  5.7.17
--- Version de PHP :  5.6.30
+-- Host: 127.0.0.1:3306
+-- Generation Time: Mar 27, 2018 at 07:11 PM
+-- Server version: 5.7.19
+-- PHP Version: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `m152_webpost`
+-- Database: `m152_webpost`
 --
 CREATE DATABASE IF NOT EXISTS `m152_webpost` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `m152_webpost`;
@@ -27,72 +27,120 @@ USE `m152_webpost`;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `comment`
+-- Table structure for table `comment`
 --
 
-CREATE TABLE `comment` (
-  `commentId` int(11) NOT NULL,
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE IF NOT EXISTS `comment` (
+  `idComment` int(11) NOT NULL AUTO_INCREMENT,
+  `titleComment` varchar(50) DEFAULT NULL,
   `commentary` text,
-  `nameMedia` varchar(100) NOT NULL,
-  `typeMedia` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `datePost` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modifyDate` timestamp NULL DEFAULT NULL,
+  `idUser` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idComment`),
+  KEY `idUser` (`idUser`)
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `comment`
+--
+
+INSERT INTO `comment` (`idComment`, `titleComment`, `commentary`, `datePost`, `modifyDate`, `idUser`) VALUES
+(47, 'Bonjour', 'Je suis Simon.', '2018-03-22 07:38:29', NULL, 16),
+(84, 'WAIT', 'WAIT I SAID', '2018-03-22 14:18:07', NULL, 12),
+(85, 'Bienvenue', 'Bienvenue sur le site WebPost', '2018-03-22 14:19:25', NULL, 12),
+(93, 'THIS IS SHIT', 'AS FUCK', '2018-03-27 17:42:02', NULL, 11);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `users`
+-- Table structure for table `media`
 --
 
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `media`;
+CREATE TABLE IF NOT EXISTS `media` (
+  `idMedia` int(11) NOT NULL AUTO_INCREMENT,
+  `typeMedia` varchar(50) NOT NULL,
+  `nameMedia` text NOT NULL,
+  `idComment` int(11) NOT NULL,
+  PRIMARY KEY (`idMedia`),
+  KEY `idComment` (`idComment`),
+  KEY `idComment_2` (`idComment`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `media`
+--
+
+INSERT INTO `media` (`idMedia`, `typeMedia`, `nameMedia`, `idComment`) VALUES
+(8, 'image/jpeg', '84-WWDTM_logo_clr_stacked_highres.jpg', 84),
+(9, 'image/jpeg', '85-1510755737.jpg', 85),
+(12, 'image/png', '93-chrome_2017-01-11_20-52-13.png', 93);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reinitkey`
+--
+
+DROP TABLE IF EXISTS `reinitkey`;
+CREATE TABLE IF NOT EXISTS `reinitkey` (
+  `idReinitkey` int(11) NOT NULL AUTO_INCREMENT,
+  `keyValue` varchar(100) NOT NULL,
+  `ExpirationDate` date NOT NULL,
   `idUser` int(11) NOT NULL,
+  PRIMARY KEY (`idReinitkey`),
+  KEY `fk_reinitkey_users_idx` (`idUser`),
+  KEY `idUser` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `idUser` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `nickname` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `salt` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `salt` text NOT NULL,
+  PRIMARY KEY (`idUser`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `nickname` (`nickname`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`idUser`, `firstname`, `lastname`, `nickname`, `email`, `password`, `salt`) VALUES
-(7, 'Gregory', 'Preisig', 'chocolat2', 'gregp@google.ch', '558f08ff74e764e534ed83369b4e1f28deb7bfeb', '03908508548ff1fad1d847d6218148b78aef6e6d'),
-(9, 'Loic', 'Dubas', 'lodub', 'lodub@google.ch', '2eb6fe969af55dc4e0bbae35fc6ef0758e3efda7', '8f026a90c44e3bfdbdc580589877185dc166ac2b');
+(11, 'Loic', 'Dubas', 'lodub', 'lodub@google.ch', 'ae47ca086b0ec4039fb7fa8132b05bd0fdc67c3d', 'e4e12fe1f2a68b4eef04e465a129286b95199dac'),
+(12, 'Jorge', 'Goncalves', 'jorevan', 'goncj@google.ch', '5c02566c209028a05cd96e28a0d6a254972aa9bd', '1c929ccf2b0d2fa66b3ad8a4ec7a3be70c27ec8e'),
+(14, 'Gregory', 'Preisig', 'chocolat2', 'gregp@google.ch', '63e258d20c8bdb8040b12c7888e9d9b09c830e18', '132487ef8cbd1a08512e113606586d4fd22eb6eb'),
+(16, 'Simon', 'Cirilli', 'simcir', 'ciris@google.ch', '10c23613e600cb77f309cabf4c49598dd9a5a4ca', 'b31fd0868dc383d4a134e1578b17611853d57a23');
 
 --
--- Index pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Index pour la table `comment`
+-- Constraints for table `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`commentId`);
+  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Index pour la table `users`
+-- Constraints for table `reinitkey`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`idUser`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `nickname` (`nickname`);
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `comment`
---
-ALTER TABLE `comment`
-  MODIFY `commentId` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT pour la table `users`
---
-ALTER TABLE `users`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;COMMIT;
+ALTER TABLE `reinitkey`
+  ADD CONSTRAINT `reinitkey_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

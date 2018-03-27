@@ -86,6 +86,10 @@ $postsPerID = getAllPostsByIDUser($id);
                                             </video>
                                             <?php
                                             break;
+                                        case 'gif':
+                                            ?>
+                                            <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
+                                        <?php
                                         default:
                                             break;
                                     endswitch;
@@ -111,7 +115,7 @@ $postsPerID = getAllPostsByIDUser($id);
                                                 Posté le <?= $date; ?> à <?= $hours; ?>
                                             </small>
                                         </p>
-                                        <a>Modifier</a> | <a href="deletePost.php?idComment=<?= $value['idComment'] ?>">Supprimer</a>
+                                        <a href="modifyPost.php?idComment=<?= $value['idComment']; ?>">Modifier</a> | <a href="deletePost.php?idComment=<?= $value['idComment'] ?>">Supprimer</a>
                                     </div>
                                 </div>
                             <?php endif; ?>

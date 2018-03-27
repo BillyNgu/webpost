@@ -107,13 +107,12 @@ function addMedia($typeMedia, $nameMedia, $tmpName) {
 }
 
 function modifyComment($title, $comment, $idComment){
-    $sql = "UPDATE `comment` SET `titleComment`=:title,`commentary`=:comment, `modifyDate`=NOW() WHERE `idComment` = :idComment";
+    $sql = "UPDATE `comment` SET `titleComment`= :title , `commentary`= :comment , `modifyDate`= NOW() WHERE `idComment` = :idComment";
     $query = myPdo()->prepare($sql);
     $query->bindParam(':title', $title, PDO::PARAM_STR);
     $query->bindParam(':comment', $comment, PDO::PARAM_STR);
     $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
-    $query->execute();
-    
+    $query->execute();  
 }
 
 function modifyMedia($typeMedia, $nameMedia, $tmpName){

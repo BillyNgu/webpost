@@ -3,16 +3,14 @@ require_once './dao/flashmessage.php';
 require_once './dao/dao.php';
 
 $idComment = filter_input(INPUT_GET, 'idComment', FILTER_VALIDATE_INT);
-
 $posts = getPost($idComment);
 
-// Check if image file is a actual image or fake image
+var_dump($idComment);
+
 if (isset($_POST['modify']) && !empty($_POST['title'])) {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $nickname = $_SESSION['Nickname'];
-    $idUser = getUserIdFromNickname($nickname);
-
+    
     modifyComment($title, $comment, $idComment);
     header('location:login.php');
 }
