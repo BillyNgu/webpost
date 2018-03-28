@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 27, 2018 at 07:11 PM
+-- Generation Time: Mar 28, 2018 at 06:24 AM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -35,12 +35,12 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `idComment` int(11) NOT NULL AUTO_INCREMENT,
   `titleComment` varchar(50) DEFAULT NULL,
   `commentary` text,
-  `datePost` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `modifyDate` timestamp NULL DEFAULT NULL,
+  `datePost` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modifyDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `idUser` int(11) DEFAULT NULL,
   PRIMARY KEY (`idComment`),
   KEY `idUser` (`idUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `comment`
@@ -50,7 +50,9 @@ INSERT INTO `comment` (`idComment`, `titleComment`, `commentary`, `datePost`, `m
 (47, 'Bonjour', 'Je suis Simon.', '2018-03-22 07:38:29', NULL, 16),
 (84, 'WAIT', 'WAIT I SAID', '2018-03-22 14:18:07', NULL, 12),
 (85, 'Bienvenue', 'Bienvenue sur le site WebPost', '2018-03-22 14:19:25', NULL, 12),
-(93, 'THIS IS SHIT', 'AS FUCK', '2018-03-27 17:42:02', NULL, 11);
+(93, 'THIS IS SHIT', 'AS FUCK 2\r\n', '2018-03-27 19:29:37', '2018-03-27 19:29:37', 11),
+(94, 'Stop this shit', 'Stop smiling', '2018-03-27 19:18:40', '2018-03-27 19:38:56', 11),
+(95, 'test', 'no image', '2018-03-27 20:18:30', NULL, 11);
 
 -- --------------------------------------------------------
 
@@ -67,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   PRIMARY KEY (`idMedia`),
   KEY `idComment` (`idComment`),
   KEY `idComment_2` (`idComment`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `media`
@@ -76,7 +78,8 @@ CREATE TABLE IF NOT EXISTS `media` (
 INSERT INTO `media` (`idMedia`, `typeMedia`, `nameMedia`, `idComment`) VALUES
 (8, 'image/jpeg', '84-WWDTM_logo_clr_stacked_highres.jpg', 84),
 (9, 'image/jpeg', '85-1510755737.jpg', 85),
-(12, 'image/png', '93-chrome_2017-01-11_20-52-13.png', 93);
+(12, 'image/png', '93-chrome_2017-01-11_20-52-13.png', 93),
+(13, 'image/gif', '94-471ea881145186234499406963_700wa_0.gif', 94);
 
 -- --------------------------------------------------------
 
