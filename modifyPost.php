@@ -16,10 +16,7 @@ if (isset($_POST['modify']) && !empty($_POST['title'])) {
         if (getIdMediaFromIdPost($idComment) == NULL) {
             addMediaWithId($_FILES['fileup']['type'], $_FILES['fileup']['name'], $_FILES['fileup']['tmp_name'], $idComment);
         }
-    } else {
-        deleteMedia($idComment, $_FILES['fileup']['name']);
     }
-
     header('location:login.php');
 }
 ?>

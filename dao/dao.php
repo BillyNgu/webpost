@@ -134,6 +134,8 @@ function addMediaWithId($typeMedia, $nameMedia, $tmpName, $idComment) {
 }
 
 function modifyMedia($typeMedia, $nameMedia, $tmpName, $idComment) {
+    deleteMedia($idComment, getNameMediaInPostByIdPost($idComment));
+
     $sql = "UPDATE `media` SET `typeMedia`=:typeMedia,`nameMedia`=:nameMedia WHERE `idComment`= :idComment";
     $query = myPdo()->prepare($sql);
     $query->bindParam(':typeMedia', $typeMedia, PDO::PARAM_STR);
@@ -144,8 +146,8 @@ function modifyMedia($typeMedia, $nameMedia, $tmpName, $idComment) {
 
     $query->bindParam(':nameMedia', $nameMedia, PDO::PARAM_STR);
     $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
-    $query->execute();
 
+    $query->execute();
     move_uploaded_file($tmpName, $target_file);
 }
 
