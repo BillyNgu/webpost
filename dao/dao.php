@@ -92,31 +92,69 @@ function addComment($title, $comment, $idUser) {
     $query->execute();
 }
 
-function addMedia($typeMedia, $nameMedia, $tmpName) {
-    $lastRecordId = getLastRecordIDFromComment();
-    $target_dir = "./uploaded_files/";
-    $target_file = $target_dir . $lastRecordId . '-' . basename($nameMedia);
-    $sql2 = "INSERT INTO `media`(`typeMedia`, `nameMedia`, `idComment`) VALUES (:fileup, :nameMedia, :idComment)";
-    $query2 = myPdo()->prepare($sql2);
-    $query2->bindParam(':fileup', $typeMedia, PDO::PARAM_STR);
-    $nameMedia = $lastRecordId . '-' . $nameMedia;
-    $query2->bindParam(':nameMedia', $nameMedia, PDO::PARAM_STR);
-    $query2->bindParam(':idComment', $lastRecordId, PDO::PARAM_INT);
-    $query2->execute();
-    move_uploaded_file($tmpName, $target_file);
-}
-
-function modifyComment($title, $comment, $idComment){
+function modifyComment($title, $comment, $idComment) {
     $sql = "UPDATE `comment` SET `titleComment`= :title , `commentary`= :comment WHERE `idComment` = :idComment";
     $query = myPdo()->prepare($sql);
     $query->bindParam(':title', $title, PDO::PARAM_STR);
     $query->bindParam(':comment', $comment, PDO::PARAM_STR);
     $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
-    $query->execute();  
+    $query->execute();
 }
 
-function modifyMedia($typeMedia, $nameMedia, $tmpName){
-    
+function addMedia($typeMedia, $nameMedia, $tmpName) {
+    $lastRecordId = getLastRecordIDFromComment();
+    $target_dir = "./uploaded_files/";
+    $target_file = $target_dir . $lastRecordId . '-' . basename($nameMedia);
+
+    $sql = "INSERT INTO `media`(`typeMedia`, `nameMedia`, `idComment`) VALUES (:fileup, :nameMedia, :idComment)";
+    $query = myPdo()->prepare($sql);
+    $query->bindParam(':fileup', $typeMedia, PDO::PARAM_STR);
+    $nameMedia = $lastRecordId . '-' . $nameMedia;
+    $query->bindParam(':nameMedia', $nameMedia, PDO::PARAM_STR);
+    $query->bindParam(':idComment', $lastRecordId, PDO::PARAM_INT);
+    $query->execute();
+
+    move_uploaded_file($tmpName, $target_file);
+}
+
+function addMediaWithId($typeMedia, $nameMedia, $tmpName, $idComment) {
+
+    $target_dir = "./uploaded_files/";
+    $target_file = $target_dir . $idComment . '-' . basename($nameMedia);
+
+    $sql = "INSERT INTO `media`(`typeMedia`, `nameMedia`, `idComment`) VALUES (:fileup, :nameMedia, :idComment)";
+    $query = myPdo()->prepare($sql);
+    $query->bindParam(':fileup', $typeMedia, PDO::PARAM_STR);
+    $nameMedia = $idComment . '-' . $nameMedia;
+    $query->bindParam(':nameMedia', $nameMedia, PDO::PARAM_STR);
+    $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
+    $query->execute();
+
+    move_uploaded_file($tmpName, $target_file);
+}
+
+function modifyMedia($typeMedia, $nameMedia, $tmpName, $idComment) {
+    $sql = "UPDATE `media` SET `typeMedia`=:typeMedia,`nameMedia`=:nameMedia WHERE `idComment`= :idComment";
+    $query = myPdo()->prepare($sql);
+    $query->bindParam(':typeMedia', $typeMedia, PDO::PARAM_STR);
+
+    $target_dir = "./uploaded_files/";
+    $target_file = $target_dir . $idComment . '-' . basename($nameMedia);
+    $nameMedia = $idComment . '-' . $nameMedia;
+
+    $query->bindParam(':nameMedia', $nameMedia, PDO::PARAM_STR);
+    $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
+    $query->execute();
+
+    move_uploaded_file($tmpName, $target_file);
+}
+
+function getIdMediaFromIdPost($idComment) {
+    $sql = "SELECT `idMedia`, `typeMedia`, `nameMedia`, `idComment` FROM `media` WHERE `idComment` = :idComment";
+    $query = myPdo()->prepare($sql);
+    $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function deletePost($id, $mediaName) {
@@ -127,7 +165,7 @@ function deletePost($id, $mediaName) {
     $query = myPdo()->prepare($sql);
     $query->bindParam(':id', $id, PDO::PARAM_INT);
     $query->execute();
-    
+
     if (!empty($mediaName)) {
         $sql2 = "DELETE FROM `media` WHERE `idComment` = :id";
         $query2 = myPdo()->prepare($sql2);
@@ -140,7 +178,21 @@ function deletePost($id, $mediaName) {
     }
 }
 
-function getPost($id){
+function deleteMedia($idComment, $mediaName) {
+    $target_dir = "./uploaded_files/";
+    $target_file = $target_dir . $mediaName;
+
+    $sql = "DELETE FROM `media` WHERE `idComment` = :idComment";
+    $query = myPdo()->prepare($sql);
+    $query->bindParam(':idComment', $idComment, PDO::PARAM_INT);
+    $query->execute();
+
+    opendir($target_dir);
+    unlink($target_file);
+    closedir($target_dir);
+}
+
+function getPost($id) {
     $sql = "SELECT `titleComment`,`commentary` FROM `comment` WHERE `idComment` = :id";
     $query = myPdo()->prepare($sql);
     $query->bindParam(':id', $id, PDO::PARAM_INT);

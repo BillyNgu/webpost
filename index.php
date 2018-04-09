@@ -109,7 +109,8 @@ if (isset($_POST['connection'])) {
                                                             <source src="./uploaded_files/<?= $file; ?>" type="video/mp4">
                                                         </video>
                                                         <?php break;
-                                                    case 'gif': ?>
+                                                    case 'gif':
+                                                        ?>
                                                         <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
                                                     <?php
                                                     default:
@@ -126,7 +127,7 @@ if (isset($_POST['connection'])) {
                                                     </p>
                                                 </div>
                                             </div>
-                                        <?php else: ?>
+        <?php else: ?>
                                             <div class="card mt-3">
                                                 <div class="card-body">
                                                     <h5 class="card-title"><?= $value['titleComment'] ?></h5>
@@ -138,7 +139,7 @@ if (isset($_POST['connection'])) {
                                                     </p>
                                                 </div>
                                             </div>
-                                        <?php endif; ?>
+        <?php endif; ?>
                                     </div>
                                 </article>
                                 <?php

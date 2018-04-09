@@ -8,8 +8,18 @@ $posts = getPost($idComment);
 if (isset($_POST['modify']) && !empty($_POST['title'])) {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    
-    modifyComment($title, $comment, $idComment);
+
+    if (!empty($_FILES['fileup'])) {
+        modifyComment($title, $comment, $idComment);
+        modifyMedia($_FILES['fileup']['type'], $_FILES['fileup']['name'], $_FILES['fileup']['tmp_name'], $idComment);
+
+        if (getIdMediaFromIdPost($idComment) == NULL) {
+            addMediaWithId($_FILES['fileup']['type'], $_FILES['fileup']['name'], $_FILES['fileup']['tmp_name'], $idComment);
+        }
+    } else {
+        deleteMedia($idComment, $_FILES['fileup']['name']);
+    }
+
     header('location:login.php');
 }
 ?>
@@ -50,24 +60,32 @@ if (isset($_POST['modify']) && !empty($_POST['title'])) {
                 </div>
             </nav>
             <div class="col">
-                <form action="modifyPost.php?idComment=<?= $idComment?>" class="form center-block" method="post" enctype="multipart/form-data">
+                <form action="modifyPost.php?idComment=<?= $idComment ?>" class="form center-block" method="post" enctype="multipart/form-data">
                     <?php foreach ($posts as $key => $value): ?>
                         <div class="form-group">
                             <h3><label for="post_title">Titre :</label></h3>
                             <input id="post_title" autofocus="" class="form-control col-3" value="<?php
-                            if (!empty($posts)) {
-                                echo $value['titleComment'];
-                            }
-                            ?>" type="text" name="title" placeholder="Entrez un titre">
+                        if (!empty($posts)) {
+                            echo $value['titleComment'];
+                        }
+                        ?>" type="text" name="title" placeholder="Entrez un titre">
                         </div>
                         <div class="form-group">
                             <h3><label for="post_commentary">Commentaire :</label></h3>
                             <textarea id="post_commentary" name="comment" class="form-control input-lg col-4" autofocus="" placeholder="Que voulez-vous partager ?"><?php
-                                if (!empty($posts)) {
-                                    echo $value['commentary'];
-                                }
-                                ?></textarea>
+                        if (!empty($posts)) {
+                            echo $value['commentary'];
+                        }
+                        ?></textarea>
                         </div>
+                        <ul class="pull-left list-inline">
+                            <li>
+                                <div class="custom-file col-5">
+                                    <input name="fileup" type="file" id="customFile" multiple accept="image/*,audio/*,video/*">
+                                    <label for="customFile">Choisissez un fichier</label>
+                                </div>
+                            </li>
+                        </ul>
                         <input class="btn btn-primary" type="submit" value="Modifier" name="modify">
                         <a class="btn btn-primary" href="login.php">Annuler</a>
                     <?php endforeach; ?>

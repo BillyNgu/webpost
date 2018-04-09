@@ -49,8 +49,10 @@ $postsPerID = getAllPostsByIDUser($id);
                     foreach ($postsPerID as $key => $value):
                         $hours = date('H:i', strtotime($value['datePost']));
                         $date = date('d-m-Y', strtotime($value['datePost']));
-                        $modifDate = date('d-m-Y', strtotime($value['modifyDate']));
-                        $modifHours = date('H:i', strtotime($value['modifyDate']));
+                        if ($value['modifyDate'] != NULL) {
+                            $modifDate = date('d-m-Y', strtotime($value['modifyDate']));
+                            $modifHours = date('H:i', strtotime($value['modifyDate']));
+                        }
                         $file = getNameMediaInPostByIdPost($value['idComment']);
                         ?>
                         <article>
@@ -69,7 +71,7 @@ $postsPerID = getAllPostsByIDUser($id);
                                             <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
                                             <?php
                                             break;
-                                        case 'jpeg':
+                                        case 'peg':
                                             ?>
                                             <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
                                             <?php
