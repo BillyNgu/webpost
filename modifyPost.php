@@ -12,7 +12,7 @@ if (isset($_POST['modify']) && !empty($_POST['title'])) {
     if (!empty($_FILES['fileup'])) {
         modifyComment($title, $comment, $idComment);
         modifyMedia($_FILES['fileup']['type'], $_FILES['fileup']['name'], $_FILES['fileup']['tmp_name'], $idComment);
-
+        
         if (getIdMediaFromIdPost($idComment) == NULL) {
             addMediaWithId($_FILES['fileup']['type'], $_FILES['fileup']['name'], $_FILES['fileup']['tmp_name'], $idComment);
         }
@@ -62,18 +62,18 @@ if (isset($_POST['modify']) && !empty($_POST['title'])) {
                         <div class="form-group">
                             <h3><label for="post_title">Titre :</label></h3>
                             <input id="post_title" autofocus="" class="form-control col-3" value="<?php
-                        if (!empty($posts)) {
-                            echo $value['titleComment'];
-                        }
-                        ?>" type="text" name="title" placeholder="Entrez un titre">
+                            if (!empty($posts)) {
+                                echo $value['titleComment'];
+                            }
+                            ?>" type="text" name="title" placeholder="Entrez un titre">
                         </div>
                         <div class="form-group">
                             <h3><label for="post_commentary">Commentaire :</label></h3>
                             <textarea id="post_commentary" name="comment" class="form-control input-lg col-4" autofocus="" placeholder="Que voulez-vous partager ?"><?php
-                        if (!empty($posts)) {
-                            echo $value['commentary'];
-                        }
-                        ?></textarea>
+                                if (!empty($posts)) {
+                                    echo $value['commentary'];
+                                }
+                                ?></textarea>
                         </div>
                         <ul class="pull-left list-inline">
                             <li>

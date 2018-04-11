@@ -135,7 +135,7 @@ function addMediaWithId($typeMedia, $nameMedia, $tmpName, $idComment) {
 
 function modifyMedia($typeMedia, $nameMedia, $tmpName, $idComment) {
     deleteMedia($idComment, getNameMediaInPostByIdPost($idComment));
-
+    
     $sql = "UPDATE `media` SET `typeMedia`=:typeMedia,`nameMedia`=:nameMedia WHERE `idComment`= :idComment";
     $query = myPdo()->prepare($sql);
     $query->bindParam(':typeMedia', $typeMedia, PDO::PARAM_STR);

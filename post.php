@@ -43,13 +43,7 @@ if (isset($_POST['post']) && !empty($_POST['title'])) {
                 header('location:login.php');
             }
         }
-
-        // Add a comment without images
     }
-//    else {
-//        addComment($title, $comment, $id);
-//        header('location:login.php');
-//    }
 }
 ?>
 <!DOCTYPE html>

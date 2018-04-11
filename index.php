@@ -91,7 +91,7 @@ if (isset($_POST['connection'])) {
                                                         <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
                                                         <?php
                                                         break;
-                                                    case 'jpeg':
+                                                    case 'peg':
                                                         ?>
                                                         <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
                                                         <?php
