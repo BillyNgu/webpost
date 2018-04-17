@@ -150,13 +150,6 @@ if (isset($_POST['register'])) {
                 </div>
                 <a class="btn btn-primary" href="index.php">Retour</a>
                 <input class="btn btn-primary" name="register" type="submit">
-                <fieldset>
-                    <table>
-
-                    </table>
-
-                </fieldset>
-
             </form>
         </div>
         <script type="text/javascript" src="js/bootstrap.js"></script>
