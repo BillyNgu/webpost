@@ -108,7 +108,8 @@ if (isset($_POST['connection'])) {
                                                         <video class = "card-img-top" autoplay="" loop="" controls="">
                                                             <source src="./uploaded_files/<?= $file; ?>" type="video/mp4">
                                                         </video>
-                                                        <?php break;
+                                                        <?php
+                                                        break;
                                                     case 'gif':
                                                         ?>
                                                         <img class = "card-img-top" alt = "" src = "./uploaded_files/<?= $file; ?>">
